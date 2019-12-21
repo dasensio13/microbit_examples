@@ -1,9 +1,7 @@
-# Escribe tu código aquí :-)
 from microbit import *
 import music
 
-n = 0
-clock = [
+clocks = [
     Image.CLOCK1,
     Image.CLOCK2,
     Image.CLOCK3,
@@ -17,16 +15,28 @@ clock = [
     Image.CLOCK11,
     Image.CLOCK12
 ]
+
+n = 1
+clock = False
+playing = False
+
 while True:
-    sleep(100)
-    v1 = pin1.read_analog()
-    if pin1.is_touched():
-        t1 = 200
-    else:
-        t1 = -200
-    print((v1, t1))
-    # display.scroll(str(v1))
-    display.show(clock[(n % 12)], wait=False)
-    if (n == 0):
-        music.play(music.BLUES, wait=False, loop=True)
-    n = n + 1
+    if (button_a.is_pressed()):
+        clock = not clock
+        display.show(Image.HEART)
+        sleep(1000)
+
+    if (button_b.is_pressed() and playing):
+        music.stop()
+        playing = False
+    elif (button_b.is_pressed() and not playing):
+        music.play(music.BIRTHDAY, wait=False, loop=True)
+        playing = True
+
+    if clock:
+        display.show(clocks[(n % 12)], wait=False)
+        n = n + 1
+    elif (n > 0):
+        display.scroll("Hello world!!!", wait=False, loop=True)
+        n = 0
+    sleep(1000)

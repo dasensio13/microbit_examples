@@ -15,28 +15,50 @@ fa2 = 'F5'
 sol2 = 'G5'
 la2 = 'A5'
 si2 = 'B5'
+silence = '0'
+
+hand = 'left'
+display.show(Image.ARROW_W)
+sleep(1000)
 
 while True:
-    sleep(100)
     v1 = pin1.read_analog() > 300
     v2 = pin2.read_analog() > 300
-    p1 = button_a.is_pressed()
-    p2 = button_b.is_pressed()
-    nota = '0'
-    if (p1 == False):
-        if (v1 == True):
-            nota = fa
-        elif (v2):
-            nota = sol
-        elif (p2):
-            nota = la
-    elif (p1):
-        if (v1):
-            nota = do2
-        elif (v2):
-            nota = re2
-        elif (p2):
-            nota = fa2
-    music.play(nota, wait=False)
-    display.show(nota, wait=False)
-    # music.pitch(v1)
+    b1 = button_a.is_pressed()
+    b2 = button_b.is_pressed()
+
+    if (b1 and b2):
+        if (hand == 'left'):
+            hand = 'right'
+            display.show(Image.ARROW_E)
+            sleep(1000)
+        else:
+            hand = 'left'
+            display.show(Image.ARROW_W)
+            sleep(1000)
+
+    if (b1):
+        if hand == 'left':
+            note = do
+        else:
+            note = sol
+    elif (v1):
+        if hand == 'left':
+            note = re
+        else:
+            note = la
+    elif (v2):
+        if hand == 'left':
+            note = mi
+        else:
+            note = si
+    elif (b2):
+        if hand == 'left':
+            note = fa
+        else:
+            note = do2
+    else:
+        note = silence
+    music.play(note, wait=False)
+    display.show(note, wait=False)
+    sleep(100)
